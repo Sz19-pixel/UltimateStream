@@ -20,23 +20,18 @@ app.get("/", (req, res) => {
 });
 
 // Stremio Addon Manifest Route
+// غير كود الـ Manifest إلى هذا
 app.get("/manifest.json", (req, res) => {
     const manifest = {
         id: "com.ultimate-stream",
         version: "1.0.0",
         name: "Ultimate Stream Addon",
         description: "Stremio addon for Ultimate Stream content",
-        resources: ["stream"],  // تم تغيير هذا السطر
+        resources: ["stream"],
         types: ["movie", "series"],
-        catalogs: [],  // تم تغيير هذا السطر
-        behaviorHints: {
-            adult: false,  // تم تغيير هذا السطر
-            p2p: false    // تم تغيير هذا السطر
-        }
+        idPrefixes: ["tt"] // أضف هذا الحقل
     };
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Content-Type', 'application/json');
-    res.json(manifest);
+    res.json(manifest); // احذف الـ headers المنفردة
 });
 
 // إضافة هذا الجزء الجديد - Stremio Stream Route
