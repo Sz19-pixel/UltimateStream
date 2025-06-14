@@ -14,8 +14,32 @@ class ScraperManager {
     }
     
     /**
-     * Initialize all available scrapers
-     */
+     
+        }
+    * Initialize all available scrapers
+     */ 
+    async getStreams(id) {
+        try {
+            const streams = [];
+            for (const scraper of this.scrapers) {
+                const result = await scraper.getStreams(id);
+                if (result && result.length > 0) {
+                    streams.push(...result.map(stream => ({
+                        name: stream.name || 'Ultimate Stream',
+                        title: stream.quality || 'Unknown Quality',
+                        url: stream.url,
+                        behaviorHints: {
+                            notWebReady: false
+                        }
+                    })));
+                }
+            }
+            return streams;
+        } catch (error) {
+            console.error('ScraperManager getStreams error:', error);
+            return [];
+        }
+     
     initializeScrapers() {
         // Add Pstream scraper
         this.scrapers.push(new PstreamScraper());
