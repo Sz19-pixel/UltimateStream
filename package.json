@@ -1,48 +1,26 @@
 {
-  "name": "stremio-scraper-addon",
+  "name": "ultimate-stream",
   "version": "1.0.0",
-  "description": "A comprehensive Stremio addon that scrapes direct HTTP streaming links from multiple websites with torrent fallback support",
+  "description": "Streaming service application",
   "main": "index.js",
   "scripts": {
     "start": "node index.js",
     "dev": "nodemon index.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "lint": "eslint src/",
-    "docker:build": "docker build -t stremio-scraper-addon .",
-    "docker:run": "docker run -p 3000:3000 stremio-scraper-addon"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "stremio",
-    "addon",
     "streaming",
-    "scraper",
-    "movies",
-    "tv-shows",
     "torrent",
-    "webtorrent"
+    "scraper"
   ],
-  "author": "Stremio Scraper Addon",
-  "license": "MIT",
+  "author": "Sz19-pixel",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "nodemon": "^2.0.22"
+  },
   "engines": {
     "node": ">=14.0.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/your-username/stremio-scraper-addon.git"
-  },
-  "dependencies": {
-    "cheerio": "^1.1.0",
-    "jsdom": "^26.1.0",
-    "magnet-uri": "^7.0.7",
-    "node-fetch": "^3.3.2",
-    "parse-torrent": "^11.0.18",
-    "puppeteer": "^24.10.1",
-    "stremio-addon-sdk": "^1.6.10",
-    "webtorrent": "^2.6.8"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.0",
-    "eslint": "^8.0.0"
   }
 }
-
