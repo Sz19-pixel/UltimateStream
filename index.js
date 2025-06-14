@@ -1,11 +1,20 @@
 const express = require("express");
 const app = express();
-const cors = require("cors");
 const ScraperManager = require("./src/scrapers/ScraperManager");
 const { TorrentManager } = require("./src/torrents/TorrentManager");
 
 // Enable CORS for all routes
-app.use(cors());
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+  
+  next();
+});;
 
 // Parse JSON bodies
 app.use(express.json());
