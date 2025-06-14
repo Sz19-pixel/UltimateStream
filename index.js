@@ -22,45 +22,54 @@ app.get("/", (req, res) => {
 // Stremio Addon Manifest Route
 app.get("/manifest.json", (req, res) => {
     const manifest = {
-        id: "com.ultimate-stream", // Unique ID for your addon
+        id: "com.ultimate-stream",
         version: "1.0.0",
         name: "Ultimate Stream Addon",
         description: "Stremio addon for Ultimate Stream content",
-        resources: ["catalog", "meta", "stream"], // What your addon provides
-        types: ["movie", "series"], // Types of content your addon supports
-        catalogs: [
-            {
-                type: "movie",
-                id: "ultimate-stream-movies",
-                name: "Ultimate Stream Movies",
-                extra: [{
-                    name: "search",
-                    isRequired: false
-                }]
-            },
-            {
-                type: "series",
-                id: "ultimate-stream-series",
-                name: "Ultimate Stream Series",
-                extra: [{
-                    name: "search",
-                    isRequired: false
-                }]
-            }
-        ],
-        // You might need to adjust these if your API routes are different
-        // For example, if your API is at /api/v1, change /catalog to /api/v1/catalog
+        resources: ["stream"],  // تم تغيير هذا السطر
+        types: ["movie", "series"],
+        catalogs: [],  // تم تغيير هذا السطر
         behaviorHints: {
-            configurable: true, // Allows users to configure the addon
-            // You can add a configuration page if needed, e.g., "configuration_url": "https://your-vercel-url.vercel.app/configure"
+            adult: false,  // تم تغيير هذا السطر
+            p2p: false    // تم تغيير هذا السطر
         }
     };
-    res.json(manifest );
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-Type', 'application/json');
+    res.json(manifest);
+});
+
+// إضافة هذا الجزء الجديد - Stremio Stream Route
+app.get('/stream/:type/:id', async (req, res) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Content-Type', 'application/json');
+    
+    try {
+        const { type, id } = req.params;
+        let streams = [];
+
+        // Get streams from scrapers
+        const scrapedStreams = await scraperManager.getStreams(id);
+        if (scrapedStreams && scrapedStreams.length > 0) {
+            streams = streams.concat(scrapedStreams);
+        }
+
+        // Get streams from torrents
+        const torrentStreams = await torrentManager.getStreams(id);
+        if (torrentStreams && torrentStreams.length > 0) {
+            streams = streams.concat(torrentStreams);
+        }
+
+        res.json({ streams: streams });
+    } catch (error) {
+        console.error('Error:', error);
+        res.json({ streams: [] });
+    }
 });
 
 // API Routes
 app.get("/api/scrapers", (req, res) => {
-    const scrapers = scraperManager.getEnabledScrapers(); // Corrected method call
+    const scrapers = scraperManager.getEnabledScrapers();
     res.json(scrapers);
 });
 
