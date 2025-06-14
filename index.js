@@ -31,15 +31,22 @@ app.get("/", (req, res) => {
 // Stremio Addon Manifest Route
 // غير كود الـ Manifest إلى هذا
 app.get("/manifest.json", (req, res) => {
-    const manifest = {
-        id: "com.ultimate-stream",
-        version: "1.0.0",
-        name: "Ultimate Stream Addon",
-        description: "Stremio addon for Ultimate Stream content",
-        resources: ["stream"],
-        types: ["movie", "series"],
-        idPrefixes: ["tt"] // أضف هذا الحقل
-    };
+  res.json({
+    id: "com.ultimate.stream.v2", // غير المعرّف
+    version: "1.0.0",
+    name: "Ultimate Stream",
+    description: "أفضل إضافة لستريمو",
+    resources: ["stream"],
+    types: ["movie", "series"],
+    idPrefixes: ["tt"],
+    catalogs: [], // أضف هذا الحقل
+    behaviorHints: {
+      configurable: true,
+      configurationRequired: false
+    },
+    logo: "https://ultimate-stream-ten.vercel.app/logo.png" // أضف رابط لوجو
+  });
+});
     res.json(manifest); // احذف الـ headers المنفردة
 });
 
