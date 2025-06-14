@@ -51,7 +51,9 @@ app.get("/manifest.json", (req, res) => {
 });
 
 // إضافة هذا الجزء الجديد - Stremio Stream Route
-app.get('/stream/:type/:id.json', async (req, res) => {
+app.get('/stream/:type/:id.json', async (req, res) => { // لاحظ إضافة .json
+  try {
+    const { type, id } = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
     
