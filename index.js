@@ -14,7 +14,7 @@ app.use((req, res, next) => {
   }
   
   next();
-});;
+});
 
 // Parse JSON bodies
 app.use(express.json());
@@ -25,84 +25,79 @@ const torrentManager = new TorrentManager();
 
 // Basic health check route
 app.get("/", (req, res) => {
-    res.json({ status: "Server is running" });
+  res.json({ status: "Server is running" });
 });
 
-// Stremio Addon Manifest Route
-// غير كود الـ Manifest إلى هذا
+// Stremio Addon Manifest Route (صححناه)
 app.get("/manifest.json", (req, res) => {
   res.json({
-    id: "com.ultimate.stream.v2", // غير المعرّف
+    id: "com.ultimate.stream.v2",
     version: "1.0.0",
     name: "Ultimate Stream",
     description: "أفضل إضافة لستريمو",
     resources: ["stream"],
     types: ["movie", "series"],
     idPrefixes: ["tt"],
-    catalogs: [], // أضف هذا الحقل
+    catalogs: [],
     behaviorHints: {
       configurable: true,
       configurationRequired: false
     },
-    logo: "https://ultimate-stream-ten.vercel.app/logo.png" // أضف رابط لوجو
+    logo: "https://ultimate-stream-ten.vercel.app/logo.png"
   });
 });
-    res.json(manifest); // احذف الـ headers المنفردة
-});
 
-// إضافة هذا الجزء الجديد - Stremio Stream Route
-app.get('/stream/:type/:id.json', async (req, res) => { // لاحظ إضافة .json
+// Stremio Stream Route
+app.get('/stream/:type/:id.json', async (req, res) => {
   try {
     const { type, id } = req.params;
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Content-Type', 'application/json');
-    
-    try {
-        const { type, id } = req.params;
-        let streams = [];
 
-        // Get streams from scrapers
-        const scrapedStreams = await scraperManager.getStreams(id);
-        if (scrapedStreams && scrapedStreams.length > 0) {
-            streams = streams.concat(scrapedStreams);
-        }
+    let streams = [];
 
-        // Get streams from torrents
-        const torrentStreams = await torrentManager.getStreams(id);
-        if (torrentStreams && torrentStreams.length > 0) {
-            streams = streams.concat(torrentStreams);
-        }
-
-        res.json({ streams: streams });
-    } catch (error) {
-        console.error('Error:', error);
-        res.json({ streams: [] });
+    // Get streams from scrapers
+    const scrapedStreams = await scraperManager.getStreams(id);
+    if (scrapedStreams && scrapedStreams.length > 0) {
+      streams = streams.concat(scrapedStreams);
     }
+
+    // Get streams from torrents
+    const torrentStreams = await torrentManager.getStreams(id);
+    if (torrentStreams && torrentStreams.length > 0) {
+      streams = streams.concat(torrentStreams);
+    }
+
+    res.json({ streams });
+  } catch (error) {
+    console.error('Error:', error);
+    res.json({ streams: [] });
+  }
 });
 
 // API Routes
 app.get("/api/scrapers", (req, res) => {
-    const scrapers = scraperManager.getEnabledScrapers();
-    res.json(scrapers);
+  const scrapers = scraperManager.getEnabledScrapers();
+  res.json(scrapers);
 });
 
 app.get("/api/torrents", (req, res) => {
-    const torrents = torrentManager.getSources();
-    res.json(torrents);
+  const torrents = torrentManager.getSources();
+  res.json(torrents);
 });
 
 // Error handling middleware
 app.use((err, req, res, next) => {
-    console.error(err.stack);
-    res.status(500).json({ error: "Something went wrong!" });
+  console.error(err.stack);
+  res.status(500).json({ error: "Something went wrong!" });
 });
 
 // For local development
 if (require.main === module) {
-    const PORT = process.env.PORT || 3000;
-    app.listen(PORT, () => {
-        console.log(`Server is running on port ${PORT}`);
-    });
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+  });
 }
 
 // Export for Vercel
