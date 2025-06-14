@@ -12,6 +12,10 @@
   ],
   "routes": [
     {
+      "src": "/manifest.json",
+      "dest": "/index.js"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/index.js"
     },
