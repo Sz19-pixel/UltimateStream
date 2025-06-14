@@ -1,8 +1,8 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const { ScraperManager } = require('./src/scrapers/ScraperManager');
-const { TorrentManager } = require('./src/torrents/TorrentManager');
+const  ScraperManager  = require('./src/scrapers/ScraperManager');
+const  TorrentManager  = require('./src/torrents/TorrentManager');
 
 // Enable CORS for all routes
 app.use(cors());
