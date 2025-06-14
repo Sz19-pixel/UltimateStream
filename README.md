@@ -1,6 +1,10 @@
+⚠️ This project is under development. Please do not fork or reuse any part of this code without permission.
+
+All rights reserved. This code is not to be copied, redistributed, or forked without explicit permission from the author 
+
 # Stremio Multi-Source Scraper Addon
 
-A comprehensive Stremio addon that scrapes direct HTTP streaming links from multiple websites with torrent fallback support. Built using Node.js with full Stremio SDK compatibility.
+A comprehensive Stremio addon that scrapes direct HTTP streaming links from multiple websites with torrent fallback support. Built using Node.js with full Stremio SDK compatibility
 
 ## Features
 
