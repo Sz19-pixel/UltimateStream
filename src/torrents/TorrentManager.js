@@ -37,7 +37,31 @@ class TorrentManager {
      * @param {string} id - Content ID
      * @param {string} type - Content type (movie/series)
      * @returns {Array} Array of torrent stream objects
-     */
+
+    */ 
+    async getStreams(id) {
+        try {
+            const streams = [];
+            for (const source of this.sources) {
+                const result = await source.getStreams(id);
+                if (result && result.length > 0) {
+                    streams.push(...result.map(stream => ({
+                        name: stream.name || 'Torrent Stream',
+                        title: stream.quality || 'Unknown Quality',
+                        url: stream.url,
+                        behaviorHints: {
+                            notWebReady: true
+                        }
+                    })));
+                }
+            }
+            return streams;
+        } catch (error) {
+            console.error('TorrentManager getStreams error:', error);
+            return [];
+        }
+    }
+ 
     async getStreams(id, type) {
         console.log(`TorrentManager: Getting torrent streams for ${id} (${type})`);
         
